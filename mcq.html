@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Quiz</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: #000;
+        }
+
+        .slide {
+            position: absolute;
+            bottom: -100%;
+            width: 100%;
+            height: 100vh;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: bottom 0.5s ease;
+            z-index: 1;
+            padding: 20px; /* Add spacing around slide boundaries */
+            box-sizing: border-box;
+        }
+
+        .active {
+            bottom: 0;
+            z-index: 10;
+        }
+
+        .main-box {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            background-color: #FFD700;
+            color: #000;
+            padding: 40px 20px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Add subtle shadow for better visuals */
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-slide {
+            background-color: #000;
+            color: #FFD700;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn-slide:hover {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* Menu Styling */
+        .menu-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #FFD700;
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        .menu-list {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            display: none;
+            padding: 10px;
+            z-index: 20;
+        }
+
+        .menu-list.active {
+            display: block;
+        }
+
+        .menu-item {
+            color: #FFD700;
+            padding: 5px 15px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-button" onclick="toggleMenu()">☰</div>
+    <div class="menu-list" id="menuList"></div>
+
+    <div id="slides"></div>
+
+    <script>
+        // MCQ data
+        const mcqData = [
+            {
+                question: "What is the capital of France?",
+                options: ["Paris", "London", "Berlin", "Madrid"],
+                answer: "Paris"
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Venus"],
+                answer: "Mars"
+            },
+            {
+                question: "What is the boiling point of water?",
+                options: ["100°C", "90°C", "80°C", "110°C"],
+                answer: "100°C"
+            }
+        ];
+
+        let currentSlide = 0;
+        let score = 0;
+
+        // Generate slides dynamically
+        function generateSlides() {
+            const slidesContainer = document.getElementById('slides');
+            slidesContainer.innerHTML = '';
+
+            mcqData.forEach((mcq, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide' + (index === 0 ? ' active' : '');
+                slide.id = `slide-${index}`;
+
+                const mainBox = document.createElement('div');
+                mainBox.className = 'main-box';
+
+                const question = document.createElement('h2');
+                question.textContent = mcq.question;
+                mainBox.appendChild(question);
+
+                const options = document.createElement('div');
+                options.className = 'options';
+
+                mcq.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'btn-slide';
+                    button.textContent = option;
+                    button.onclick = () => checkAnswer(option, mcq.answer, index);
+                    options.appendChild(button);
+                });
+
+                const feedback = document.createElement('p');
+                feedback.className = 'feedback';
+                feedback.id = `feedback-${index}`;
+                mainBox.appendChild(options);
+                mainBox.appendChild(feedback);
+
+                slide.appendChild(mainBox);
+                slidesContainer.appendChild(slide);
+            });
+
+            generateMenu();
+        }
+
+        // Generate menu dynamically
+        function generateMenu() {
+            const menuList = document.getElementById('menuList');
+            menuList.innerHTML = '';
+
+            mcqData.forEach((mcq, index) => {
+                const menuItem = document.createElement('div');
+                menuItem
+                menuItem.textContent = `Slide ${index + 1}`;
+                menuItem.onclick = () => goToSlide(index);
+                menuList.appendChild(menuItem);
+            });
+        }
+
+        // Check if the answer is correct
+        function checkAnswer(selectedOption, correctAnswer, index) {
+            const feedback = document.getElementById(`feedback-${index}`);
+            if (selectedOption === correctAnswer) {
+                feedback.textContent = `🎉 Yippee!! That's correct!`;
+                score++;
+                setTimeout(() => goToNextSlide(), 1000);
+            } else {
+                feedback.textContent = `Oops!! Let's try again.`;
+            }
+        }
+
+        // Go to the next slide
+        function goToNextSlide() {
+            if (currentSlide < mcqData.length - 1) {
+                goToSlide(currentSlide + 1);
+            } else {
+                showFinalScore();
+            }
+        }
+
+        // Go to a specific slide
+        function goToSlide(index) {
+            document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+            currentSlide = index;
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+        }
+
+        // Show final score
+        function showFinalScore() {
+            const slidesContainer = document.getElementById('slides');
+            slidesContainer.innerHTML = `
+                <div class="slide active">
+                    <div class="main-box">
+                        <h2>Your Score: ${score}/${mcqData.length}</h2>
+                        <p>Thank you for playing the quiz!</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle menu visibility
+        function toggleMenu() {
+            const menuList = document.getElementById('menuList');
+            menuList.classList.toggle('active');
+        }
+
+        // Initialize the slides and menu
+        generateSlides();
+    </script>
+</body>
+</html>
