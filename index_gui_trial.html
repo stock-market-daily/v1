@@ -1,0 +1,534 @@
+<!-- This code has working
+1. one container divided into 3 columns and 1 container beside
+2. Two tables
+3. A hover over info box in solid yellow color -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Containers Layout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript">
+  async function loadLocalJSON() {
+      try {
+          const response1 = await fetch('data2.json'); // Fetch the local JSON file
+          const data = await response1.json(); // Parse it as JSON
+          console.log('Data loaded:', data); // Log the data to the console
+
+          // Clear previous results
+          document.getElementById('result2').innerHTML = '';
+
+          // Loop through the JSON object and display each key-value pair
+          for (const [key, value] of Object.entries(data)) {
+              const paragraph = document.createElement('p');
+              paragraph.innerText = `${key}: ${value}`;
+              document.getElementById('result2').appendChild(paragraph);
+          }
+
+      } catch (error) {
+          console.error('Error loading local JSON:', error);
+          document.getElementById('result2').innerText = 'Error loading local JSON';
+      }
+  }
+  async function fetchStockData() {
+     const symbol = document.getElementById('symbol').value;
+     console.log(`Fetching data for symbol: ${symbol}`);
+
+     try {
+         const response = await fetch(`http://localhost:5000/api/stock?symbol=${symbol}`);
+         const data = await response.json();
+         console.log('Response:', data);
+
+         if (response.ok) {
+           //document.getElementById('result').innerText = `Price of ${data."dividend_yield"}`;
+             //document.getElementById('result').innerText = `Price of ${data.symbol}:`;
+            // let resultText = `Data for ${symbol}:\n\n`;
+
+             document.getElementById('result').innerText = `${data["PEG Ratio"]}`;
+
+             document.getElementById('symbol').innerText = `${data["symbol"]}`;
+//document.getElementById('market_price').innerText = `${data["Market Price"]}`;
+document.getElementById('pe_ratio').innerText = `${data["P/E Ratio"]}`;
+document.getElementById('earnings_yield').innerText = `${data["Earnings Yield"]}`;
+document.getElementById('peg_ratio').innerText = `${data["PEG Ratio"]}`;
+document.getElementById('dividend_yield').innerText = `${data["Dividend Yield"]}`;
+document.getElementById('price_to_sales').innerText = `${data["Price to Sales"]}`;
+document.getElementById('price_to_book').innerText = `${data["Price to Book Value"]}`;
+document.getElementById('evebitda').innerText = `${data["EV/EBITDA"]}`;
+document.getElementById('enterprise_value').innerText = `${data["Enterprise Value"]}`;
+document.getElementById('industry_pe').innerText = `${data["Industry PE"]}`;
+//document.getElementById('current_price').innerText = `${data["Current Price"]}`;
+document.getElementById('market_cap').innerText = `${data["Market Capitalization"]}`;
+
+            // document.getElementById('result').innerHTML = '';
+
+             // Loop through the stock_info_json object and display each key-value pair
+            /* for (const [key, value] of Object.entries(data)) {
+                 const paragraph = document.createElement('p');
+                 paragraph.innerText = `${key}: ${value}`;
+                 document.getElementById('result').appendChild(paragraph);
+             } */
+            // document.getElementById('result').innerText = resultText;
+         } else {
+             document.getElementById('result').innerText = `Error: ${data.error}`;
+         }
+     } catch (error) {
+         console.error('Error fetching stock data:', error);
+         document.getElementById('result').innerText = 'Error fetching stock data';
+     }
+ }
+ async function fetchIncome() {
+    const symbol = document.getElementById('symbol').value;
+    console.log(`Fetching data for symbol: ${symbol}`);
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/stock?symbol=${symbol}`);
+        const data = await response.json();
+        console.log('Response:', data);
+
+        if (response.ok) {
+          const tableHeader = document.getElementById("table-header");
+          const tableBody = document.getElementById("table-body");
+          const columns = Object.keys(data);
+          document.getElementById('income').innerText = `${columns}`;
+          document.getElementById('income').innerText = `${data[0]["Basic Average Shares"]}`;
+          const keys = Object.keys(data[0])
+          console.log("Hello")
+          console.log(keys)
+          for (let item in data[0]) {
+            console.log(item)
+          }
+          for (let item in data[0]) {
+          const  tr = document.createElement("tr");
+
+            const td = document.createElement("td");
+
+            //console.log(`${item}: ${data[0][item]}`)
+            td.innerText = `${item}`;
+            tr.appendChild(td);
+            tableBody.appendChild(tr);
+
+          }
+
+
+        } else {
+            document.getElementById('result').innerText = `Error: ${data.error}`;
+        }
+    } catch (error) {
+        console.error('Error fetching stock data:', error);
+        document.getElementById('result').innerText = 'Error fetching stock data';
+    }
+}
+
+async function fetchBalanceSheet() {
+   const symbol = document.getElementById('symbol').value;
+   console.log(`Fetching data for symbol: ${symbol}`);
+
+   try {
+       const response = await fetch(`http://localhost:5000/api/stock?symbol=${symbol}`);
+       const data = await response.json();
+       console.log('Response:', data);
+
+       if (response.ok) {
+         const tableHeader = document.getElementById("table-header");
+         const tableBody = document.getElementById("table-body");
+         const columns = Object.keys(data);
+         document.getElementById('income').innerText = `${columns}`;
+         document.getElementById('income').innerText = `${data[0]["Basic Average Shares"]}`;
+         const keys = Object.keys(data[0])
+         console.log("Hello")
+         console.log(keys)
+         for (let item in data[0]) {
+           console.log(item)
+         }
+         for (let item in data[0]) {
+         const  tr = document.createElement("tr");
+
+           const td = document.createElement("td");
+
+           //console.log(`${item}: ${data[0][item]}`)
+           td.innerText = `${item}`;
+           tr.appendChild(td);
+           tableBody.appendChild(tr);
+
+         }
+
+
+       } else {
+           document.getElementById('result').innerText = `Error: ${data.error}`;
+       }
+   } catch (error) {
+       console.error('Error fetching stock data:', error);
+       document.getElementById('result').innerText = 'Error fetching stock data';
+   }
+}
+  window.fetchBalanceSheet = fetchBalanceSheet;
+  window.fetchIncome = fetchIncome;
+  window.fetchStockData = fetchStockData;
+  //window.loadLocalJSON = loadLocalJSON;
+</script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .container-left {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            //border: 150px;
+            margin-right: 20px; /* Add spacing to the right */
+
+        }
+        .table-container {
+                    background-color: #1e1e1e;
+                    padding: 20px;
+                    border-radius: 8px;
+                    margin: 0 auto;
+                    // this margin changes a lot of table gui
+                }
+
+                table {
+                    background-color: #2a2a2a;
+                    color: #ffffff;
+                }
+
+                th, td {
+                    text-align: center;
+                    vertical-align: middle;
+                }
+
+                th {
+                    background-color: #333333;
+                }
+
+                tbody tr:nth-child(odd) {
+                    background-color: #1a1a1a;
+                }
+
+                tbody tr:nth-child(even) {
+                    background-color: #2a2a2a;
+                }
+
+                .table-responsive {
+                    overflow-x: auto;
+                }
+
+                @media (max-width: 991.98px) {
+                    .table-container {
+                        padding: 10px;
+                    }
+                }
+                .container-title {
+            color: #ffffff;
+            margin-bottom: 20px; /* Space between title and table */
+        }
+        .container-left {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            //border: 150px;
+            margin-right: 20px; /* Add spacing to the right */
+
+        }
+
+        .container-right {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            //height: 100%; /* Adjust this to fit the height of the left container */
+
+          //  margin-left:10px;
+        }
+
+        .item-box {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px; /* Reduce spacing between items */
+        }
+
+        @media (min-width: 992px) {
+            .container-left {
+                max-width: 75%;
+                float: left; /* Align to the left */
+            }
+
+            .container-right {
+                max-width: 20%;
+                float: right; /* Align to the right */
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .container-left, .container-right {
+                max-width: 100%; /* Full width on smaller screens */
+                float: none; /* Reset float */
+            }
+        }
+        .info-link {
+            position: relative; /* Position relative for positioning the info box */
+            color: #ffffff; /* Link color matches table font color */
+            text-decoration: none; /* Remove underline from the link */
+        }
+
+        .info-link:hover .info-box {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0); /* Make the info box visible on hover */
+        }
+
+        .info-box {
+            visibility: hidden;
+            opacity: 0;
+            background-color: #ffd301; /* Solid background color for info box */
+            color: #000000; /* Text color inside info box */
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #000000; /* Solid border to make the box edged */
+            position: absolute;
+            bottom: 125%; /* Position the box above the link */
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+            white-space: nowrap; /* Prevent text from wrapping */
+            z-index: 1000; /* Ensure the box is on top of other content */
+        }
+
+        .info-link:hover .info-box::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: #ffd301 transparent transparent transparent; /* Arrow color matches info box */
+        }
+        .key-value-pair {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px; /* Space between rows */
+}
+
+.key-value-pair .key {
+    font-weight: bold;
+    margin-right: 10px; /* Space between key and value */
+}
+
+.key-value-pair .value {
+    text-align: right;
+    flex-grow: 1; /* Ensures the value aligns to the right */
+}
+    </style>
+</head>
+<body>
+
+<!-- TRIAL STARTS -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Stock Market Screener</h2>
+            <!-- <form onsubmit="event.preventDefault(); loadLocalJSON();"> -->
+              <form onsubmit="event.preventDefault(); fetchBalanceSheet();">
+<div class="form-row align-items-center">
+    <div class="col-sm-3 my-1">
+        <input type="text" id="symbol" class="form-control" placeholder="Enter stock symbol" />
+    </div>
+    <div class="col-auto my-1">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</div>
+</form>
+
+<!-- TRIAL ENDS -->
+<div class="container my-5">
+    <div class="row">
+        <!-- Left Container (3/4 width, with 3 partitions) -->
+        <div class="container-left">
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <div class="item-box" id="result">Item 1</div>
+                </div>
+                <!-- <div class="col-md-4 col-sm-6">
+                    <div class="item-box">
+                      <div class="key-value-pair">
+                        <div class="key">Name:</div>
+                        <div class="value">John Doe</div>
+                      </div>
+                    </div>
+                </div> -->
+                <div class="col-md-4 col-sm-6">
+                    <div class="item-box">
+                      <div class="key-value-pair">
+                      <div class="key">P/E Ratio:</div>
+                      <div class="value" id="pe_ratio"></div>
+</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="item-box">
+                      <div class="key">Earnings Yield:</div>
+<div class="value" id="earnings_yield"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="item-box">
+                      <div class="key">PEG Ratio:</div>
+<div class="value" id="peg_ratio"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="item-box">
+                      <div class="key">Dividend Yield:</div>
+<div class="value" id="dividend_yield"></div>
+                    </div>
+                </div>
+                <!-- Add more items as needed -->
+
+            </div>
+
+        </div>
+
+        <!-- Right Container (1/4 width, no partitions) -->
+        <div class="container-right">
+            <div class="item-box">Right Container
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped">
+                        <thead>
+                            <tr>
+                                <!-- Example Column Headers -->
+                                <th id= "income">#</th>
+                                <th>Name</th>
+                                <th>Value</th>
+                                <th>Extra Column 1</th>
+                                <th>Extra Column 2</th>
+                                <!-- <th>Extra Column 2</th> -->
+
+                                <!-- Add more headers as needed -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Example Rows -->
+                            <tr>
+                                <td>1</td>
+                                <td>Item 1</td>
+                                <td>Value 1</td>
+                                <td>Extra 1</td>
+                                <td>Extra 2</td>
+
+                                <!-- Add more columns as needed -->
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Item 2</td>
+                                <td>Value 2</td>
+                                <td>Extra 1</td>
+                                <td>Extra 2</td>
+                                <!-- Add more columns as needed -->
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Item 3</td>
+                                <td>Value 3</td>
+                                <td>Extra 1</td>
+                                <td>Extra 2</td>
+                                <!-- Add more columns as needed -->
+                            </tr>
+                            <!-- Add more rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-12">
+          <div class="container-title">
+                <h2>Profit and Loss Statement</h2>
+                <p class="lead">Here is a comprehensive table showing the details of various items. You can add as many columns as needed.</p>
+            </div>
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped">
+                        <thead>
+                            <tr>
+                                <!-- Example Column Headers -->
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Value</th>
+                                <th>Extra Column 1</th>
+                                <th>Extra Column 2</th>
+                                <!-- <th>Extra Column 2</th> -->
+
+                                <!-- Add more headers as needed -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Example Rows -->
+                            <tr>
+                                <td>1</td>
+                                <td>Item 1</td>
+                                <td>Value 1</td>
+                                <td>Extra 1</td>
+                                <td>Extra 2</td>
+
+                                <!-- Add more columns as needed -->
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>Item 2</td>
+                                <td>Value 2</td>
+                                <td>Extra 1</td>
+                                <td>Extra 2</td>
+                                <!-- Add more columns as needed -->
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Item 3</td>
+                                <td>Value 3</td>
+                                <td>Extra 1</td>
+                                <td>Extra 2</td>
+                                <!-- Add more columns as needed -->
+                            </tr>
+                            <!-- Add more rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table id="financials-table">
+    <thead>
+        <tr id="table-header">
+            <!-- Headers will be added dynamically -->
+        </tr>
+    </thead>
+    <tbody id="table-body">
+        <!-- Data will be added dynamically -->
+    </tbody>
+</table>
+<a href="#" class="info-link">
+                Hover over me
+                <div class="info-box">
+                    This is the info box!
+                </div>
+            </a>
+</body>
+</html>
