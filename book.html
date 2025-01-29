@@ -1,0 +1,69 @@
+<!-- Seperate out menu - toogle from JavaScript -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Slide Page</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        /* CSS to ensure newlines are respected */
+        #menuList {
+            white-space: pre-line; /* Newlines will be rendered */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu Button -->
+    <div class="menu-button" onclick="toggleMenu()">☰</div>
+<div class="menu-button-left" onclick="toggleMenuLeft()">☰</div>
+    <!-- Menu List -->
+    <div class="menu-list" id="menuList"></div>
+  <div class="menu-list-left" id="menuListLeft"></div>
+    <!-- Slides Container -->
+    <div class="container-fluid d-flex justify-content-center align-items-center" style="height: 100vh;" id="slidesContainer">
+        <!-- Slides will be dynamically generated here -->
+    </div>
+
+    <!-- Bootstrap JS (for responsiveness) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Embedded JSON Data and Custom JS for Slide Functionality -->
+<script src="json.js"></script>
+    <script src="toogle.js"></script>
+    <script>
+        // JSON data for each slide
+        // function createMenu() {
+        //     const menuList = document.getElementById("menuList");
+        //     menuList.innerHTML = ""; // Clear any existing content
+        //
+        //     jsonData.forEach((slideData, index) => {
+        //         const slideNumber = index + 1;
+        //
+        //         const menuItem = document.createElement("div");
+        //         menuItem.classList.add("menu-item");
+        //         menuItem.textContent = slideData.title_for_menu;
+        //         menuItem.onclick = () => {
+        //             nextSlide(slideNumber);
+        //             toggleMenu(); // Close menu after selecting a slide
+        //         };
+        //
+        //         menuList.appendChild(menuItem);
+        //     });
+        // }
+//Create menus was Here
+
+        // Initialize slides and menu on page load
+      //  createSlides();
+      createSlides(summary5);
+      //createSlides(jsonData);
+        createMenu();
+        createMenuLeft();
+    </script>
+
+</body>
+</html>
