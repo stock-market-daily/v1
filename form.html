@@ -1,35 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Tabletop.js Example</title>
+<table class="table">
+    <tr>
+        <th>Destinations</th>
+        <th>Hospitality</th>
+        <th>Taxi</th>
+        <th>Hotel</th>
+      <th>Thank you</th>
+    </tr>
+</table>
+<script>
+window.onload = function() {
+    init()
+  };
 
-<script src="https://cdn.jsdelivr.net/npm/tabletop@1.6.0/tabletop.min.js"></script>
+  var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1AcAVPfsCuwicfgaT8LPd6bDScRJrCd0ryJncYmWFvpk/pubhtml';
 
-</head>
-<body>
-  <h1>People List</h1>
-  <ul id="people"></ul>
+  function init() {
+    Tabletop.init({
+      key: public_spreadsheet_url,
+      callback: showInfo,
+      simpleSheet: true
+    })
+  }
 
-  <script>
-    // Replace this with your spreadsheet key
-    const publicSpreadsheetKey = '1C7pEL2l8VHfJABMs-oHgSxFWb4WpD09KkztmhPoXjr4';
-
-    function showInfo(data, tabletop) {
-      const peopleList = document.getElementById('people');
-      data.forEach(person => {
-        const li = document.createElement('li');
-        li.textContent = `${person.Name} (${person.Age} years old) from ${person.City}`;
-        peopleList.appendChild(li);
-      });
+  function showInfo(data, tabletop) {
+    var tr;
+    for (var i = 0; i < data.length; i++) {
+      tr = $('<tr/>');
+      tr.append("<td>" + data[i].Destinations + "</td>");
+      tr.append("<td>" + data[i].Hospitality + "</td>");
+      tr.append("<td>" + data[i].Taxi + "</td>");
+            tr.append("<td>" + data[i].Hotel + "</td>");
+            tr.append("<td>" + data[i].ThankYou + "</td>");
+      $('table').append(tr);
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      Tabletop.init({
-        key: publicSpreadsheetKey,
-        callback: showInfo,
-        simpleSheet: true
-      });
-    });
-  </script>
-</body>
-</html>
+    console.log(data);
+  }
+</script>
