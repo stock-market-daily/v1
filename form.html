@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Form Save</title>
+</head>
+<body>
+  <h2>Simple Input Form</h2>
+  <form id="myForm">
+    <label for="name">Name:</label><br />
+    <input type="text" id="name" name="name" required /><br /><br />
+
+    <label for="email">Email:</label><br />
+    <input type="email" id="email" name="email" required /><br /><br />
+
+    <button type="submit">Save to JSON</button>
+  </form>
+
+  <script>
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent form from submitting normally
+
+      // Get form values
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+
+      // Create a JSON object
+      const data = {
+        name: name,
+        email: email
+      };
+
+      // Convert to JSON string
+      const jsonString = JSON.stringify(data, null, 2);
+
+      // Create a blob
+      const blob = new Blob([jsonString], { type: "application/json" });
+
+      // Create a link to download
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "form-data.json"; // change to .txt if you prefer
+      a.click();
+    });
+  </script>
+</body>
+</html>
