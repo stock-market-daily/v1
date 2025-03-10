@@ -1,38 +1,33 @@
-<table class="table">
-    <tr>
-        <th>Destinations</th>
-        <th>Hospitality</th>
-        <th>Taxi</th>
-        <th>Hotel</th>
-      <th>Thank you</th>
-    </tr>
-</table>
-<script>
-window.onload = function() {
-    init()
-  };
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tabletop.js Demo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js"></script>
+</head>
+<body>
 
-  var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1AcAVPfsCuwicfgaT8LPd6bDScRJrCd0ryJncYmWFvpk/pubhtml';
+<h1>People List</h1>
+ <ul id="people"></ul>
 
-  function init() {
-    Tabletop.init({
-      key: public_spreadsheet_url,
-      callback: showInfo,
-      simpleSheet: true
-    })
-  }
+ <script>
+   window.addEventListener('DOMContentLoaded', function () {
+     const publicSpreadsheetKey = '1C7pEL2l8VHfJABMs-oHgSxFWb4WpD09KkztmhPoXjr4';
 
-  function showInfo(data, tabletop) {
-    var tr;
-    for (var i = 0; i < data.length; i++) {
-      tr = $('<tr/>');
-      tr.append("<td>" + data[i].Destinations + "</td>");
-      tr.append("<td>" + data[i].Hospitality + "</td>");
-      tr.append("<td>" + data[i].Taxi + "</td>");
-            tr.append("<td>" + data[i].Hotel + "</td>");
-            tr.append("<td>" + data[i].ThankYou + "</td>");
-      $('table').append(tr);
-    }
-    console.log(data);
-  }
-</script>
+     Tabletop.init({
+       key: publicSpreadsheetKey,
+       callback: function(data, tabletop) {
+         console.log("Received data:", data);
+         const peopleList = document.getElementById('people');
+         peopleList.innerHTML = '';
+         data.forEach(function(person) {
+           const li = document.createElement('li');
+           li.textContent = `${person.Name} (${person.Age} years old) from ${person.City}`;
+           peopleList.appendChild(li);
+         });
+       },
+       simpleSheet: true
+     });
+   });
+ </script>
+</body>
+</html>
